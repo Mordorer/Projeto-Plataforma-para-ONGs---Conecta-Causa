@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Colaborador - ONG Conecta Bem</title>
+    <meta name="description" content="Acesso restrito para gestão de projetos e indicadores da ONG Conecta Bem.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- O script do lucide foi removido pois usaremos SVGs inline para o ícone de senha -->
+    
+    <!-- Link para o arquivo CSS externo (agora sem @apply) -->
+    <link rel="stylesheet" href="main/assets/css/gestao.css">
+    <style>
+        /* Adiciona um estilo para o ponteiro no ícone de senha */
+        #togglePassword {
+            cursor: pointer;
+        }
+        /* Ajusta a posição do ícone de senha se o label não estiver flutuando */
+        #togglePassword {
+            top: 2.25rem; /* Ajuste manual para alinhar com o input */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Cabeçalho e Navegação -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- LOGO ATUALIZADO -->
+            <a href="index.html" class="h-10">
+                <img src="main_1/assets/image/logo.png" alt="Logo ONG Conecta Bem" class="h-10 w-auto">
+            </a>
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="index.html" class="font-medium text-gray-600 hover:text-teal-600">Início</a>
+                <a href="projetos.html" class="font-medium text-gray-600 hover:text-teal-600">Projetos</a>
+                <a href="comunidade.html" class="font-medium text-gray-600 hover:text-teal-600">Comunidade</a>
+                <a href="gestao.html" class="font-medium text-teal-600 border-b-2 border-teal-600 pb-1">Colaborador</a>
+                <a href="cadastro.html" class="font-medium text-gray-600 hover:text-teal-600">Participe</a>
+                <a href="cadastro.html" class="bg-teal-600 text-white px-5 py-2 rounded-full hover:bg-teal-700 transition duration-300">Seja Voluntário</a>
+            </div>
+            <!-- Botão Menu Mobile -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <!-- Menu Mobile (oculto por padrão) -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-2">
+            <a href="index.html" class="block font-medium text-gray-600 hover:text-teal-600">Início</a>
+            <a href="projetos.html" class="block font-medium text-gray-600 hover:text-teal-600">Projetos</a>
+            <a href="comunidade.html" class="block font-medium text-gray-600 hover:text-teal-600">Comunidade</a>
+            <a href="gestao.html" class="block font-medium text-teal-600">Colaborador</a>
+            <a href="cadastro.html" class="block font-medium text-gray-600 hover:text-teal-600">Participe</a>
+            <a href="cadastro.html" class="block mt-2 w-full text-center bg-teal-600 text-white px-5 py-2 rounded-full hover:bg-teal-700 transition duration-300">Seja Voluntário</a>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="py-16">
+        <div class="container mx-auto px-6">
+
+            <!-- Tela de Login (Estado Inicial) -->
+            <div id="login-screen" class="max-w-md mx-auto bg-white p-8 md:p-12 rounded-lg shadow-xl">
+                <h1 class="text-3xl font-bold text-center mb-6">Acesso do Colaborador</h1>
+                <p class="text-center text-gray-600 mb-8">Faça login para gerenciar os projetos.</p>
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+                        <input type="text" id="username" name="username" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500" required>
+                    </div>
+                    <!-- CAMPO DE SENHA ATUALIZADO -->
+                    <div class="mb-6 relative">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                        <input type="password" id="password" name="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500 pr-10" required>
+                        <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-teal-600">
+                            <!-- SVG Olho Aberto (Padrão) -->
+                            <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <!-- SVG Olho Fechado (Oculto) -->
+                            <svg id="eye-closed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-off hidden"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                        </button>
+                    </div>
+                    <button type="submit" class="w-auto mx-auto block px-12 bg-teal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-300">Entrar</button>
+                </form>
+            </div>
+
+            <!-- Conteúdo do Dashboard (Oculto inicialmente) -->
+            <div id="dashboard-content" class="hidden">
+                <h1 class="text-4xl font-bold mb-8">Painel de Gestão de Projetos</h1>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Coluna 1: Cadastro/Edição de Projeto -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h2 id="form-title" class="text-2xl font-bold mb-6">Cadastrar Novo Projeto</h2>
+                            <form id="projectForm" class="space-y-4">
+                                <!-- Campo oculto para armazenar o ID da imagem (URL) durante a edição -->
+                                <input type="hidden" id="projectImageUrl" name="projectImageUrl">
+                                
+                                <div>
+                                    <label for="projectName" class="block text-sm font-medium text-gray-700 mb-1">Nome do Projeto</label>
+                                    <input type="text" id="projectName" name="projectName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500" required>
+                                </div>
+                                <div>
+                                    <label for="projectCategory" class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                                    <select id="projectCategory" name="projectCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500 bg-white" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="educacao">Educação</option>
+                                        <option value="saude">Saúde</option>
+                                        <option value="meio-ambiente">Meio Ambiente</option>
+                                        <option value="cultura">Cultura</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="projectDescription" class="block text-sm font-medium text-gray-700 mb-1">Descrição Detalhada</label>
+                                    <textarea id="projectDescription" name="projectDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500 min-h-[120px]" required></textarea>
+                                </div>
+                                <div>
+                                    <label for="projectImpact" class="block text-sm font-medium text-gray-700 mb-1">Indicadores de Impacto</label>
+                                    <textarea id="projectImpact" name="projectImpact" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500 min-h-[120px]" placeholder="Ex: Nº de alunos atendidos, taxa de evasão reduzida..."></textarea>
+                                </div>
+                                <div>
+                                    <label for="projectMedia" class="block text-sm font-medium text-gray-700 mb-1">Foto Principal</label>
+                                    <input type="file" id="projectMedia" name="projectMedia" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 cursor-pointer">
+                                    <span class="text-xs text-gray-500 mt-1 block">Deixe em branco se não quiser alterar a foto existente (durante a edição).</span>
+                                </div>
+                                <!-- Botões de Ação -->
+                                <button type="submit" id="saveProjectButton" class="w-full bg-teal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-300">Salvar Projeto</button>
+                                <button type="button" id="cancelEditButton" class="w-full bg-gray-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition duration-300 mt-2 hidden">Cancelar Edição</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 2: Projetos Ativos -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h2 class="text-2xl font-bold mb-6">Projetos Ativos</h2>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <!-- Coluna de Foto Adicionada -->
+                                            <th class="p-4 font-semibold">Foto</th>
+                                            <th class="p-4 font-semibold">Projeto</th>
+                                            <th class="p-4 font-semibold">Categoria</th>
+                                            <th class="p-4 font-semibold">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- ID adicionado ao Tbody -->
+                                    <tbody id="project-list" class="divide-y divide-gray-200">
+                                        <!-- Dados de exemplo com data-id e classes -->
+                                        <tr data-id="1" data-image="https://placehold.co/600x400/63b3ed/ffffff?text=Educação+Digital">
+                                            <td class="p-4"><img src="https://placehold.co/600x400/63b3ed/ffffff?text=Educação+Digital" alt="Educação Digital" class="h-10 w-16 object-cover rounded"></td>
+                                            <td class="p-4" data-field="name">Educação Digital para Todos</td>
+                                            <td class="p-4" data-field="category" data-category-value="educacao"><span class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800">Educação</span></td>
+                                            <td class="p-4 space-x-2">
+                                                <button class="edit-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Editar</button>
+                                                <button class="gallery-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Galeria</button>
+                                            </td>
+                                            <!-- Campos ocultos com dados adicionais -->
+                                            <td class="hidden" data-field="description">Descrição do projeto de Educação Digital...</td>
+                                            <td class="hidden" data-field="impact">Indicadores do projeto de Educação Digital...</td>
+                                        </tr>
+                                        <tr data-id="2" data-image="https://placehold.co/600x400/48bb78/ffffff?text=Horta+Comunitária">
+                                            <td class="p-4"><img src="https://placehold.co/600x400/48bb78/ffffff?text=Horta+Comunitária" alt="Horta" class="h-10 w-16 object-cover rounded"></td>
+                                            <td class="p-4" data-field="name">Horta Comunitária Sustentável</td>
+                                            <td class="p-4" data-field="category" data-category-value="meio-ambiente"><span class="px-3 py-1 text-sm rounded-full bg-green-100 text-green-800">Meio Ambiente</span></td>
+                                            <td class="p-4 space-x-2">
+                                                <button class="edit-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Editar</button>
+                                                <button class="gallery-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Galeria</button>
+                                            </td>
+                                            <td class="hidden" data-field="description">Descrição do projeto de Horta Comunitária...</td>
+                                            <td class="hidden" data-field="impact">Indicadores do projeto de Horta...</td>
+                                        </tr>
+                                        <tr data-id="3" data-image="https://placehold.co/600x400/f6ad55/ffffff?text=Cultura+e+Arte">
+                                            <td class="p-4"><img src="https://placehold.co/600x400/f6ad55/ffffff?text=Cultura+e+Arte" alt="Arte" class="h-10 w-16 object-cover rounded"></td>
+                                            <td class="p-4" data-field="name">Arte e Cultura na Periferia</td>
+                                            <td class="p-4" data-field="category" data-category-value="cultura"><span class="px-3 py-1 text-sm rounded-full bg-orange-100 text-orange-800">Cultura</span></td>
+                                            <td class="p-4 space-x-2">
+                                                <button class="edit-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Editar</button>
+                                                <button class="gallery-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Galeria</button>
+                                            </td>
+                                            <td class="hidden" data-field="description">Descrição do projeto de Arte e Cultura...</td>
+                                            <td class="hidden" data-field="impact">Indicadores do projeto de Arte...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 ONG Conecta Bem. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Script para Menu Mobile, Login e Gestão de Projetos -->
+    <script>
+        // --- VARIÁVEIS GLOBAIS ---
+        let editingProjectId = null;
+        const projectForm = document.getElementById('projectForm');
+        const projectList = document.getElementById('project-list');
+        const saveProjectButton = document.getElementById('saveProjectButton');
+        const cancelEditButton = document.getElementById('cancelEditButton');
+        const formTitle = document.getElementById('form-title');
+
+        // --- DICIONÁRIO PARA CATEGORIAS ---
+        const categoryMap = {
+            'educacao': { text: 'Educação', class: 'bg-blue-100 text-blue-800' },
+            'saude': { text: 'Saúde', class: 'bg-pink-100 text-pink-800' },
+            'meio-ambiente': { text: 'Meio Ambiente', class: 'bg-green-100 text-green-800' },
+            'cultura': { text: 'Cultura', class: 'bg-orange-100 text-orange-800' }
+        };
+
+        // --- FUNÇÃO PARA RESETAR O FORMULÁRIO ---
+        function resetProjectForm() {
+            projectForm.reset();
+            editingProjectId = null;
+            formTitle.textContent = 'Cadastrar Novo Projeto';
+            saveProjectButton.textContent = 'Salvar Projeto';
+            cancelEditButton.classList.add('hidden');
+            document.getElementById('projectImageUrl').value = ''; // Limpa o URL da imagem oculta
+        }
+
+        // --- FUNÇÃO PARA CRIAR O HTML DA CATEGORIA ---
+        function getCategoryHtml(categoryValue) {
+            const categoryInfo = categoryMap[categoryValue] || { text: 'Outro', class: 'bg-gray-100 text-gray-800' };
+            return `<span class="px-3 py-1 text-sm rounded-full ${categoryInfo.class}">${categoryInfo.text}</span>`;
+        }
+
+        // --- FUNÇÃO PARA ADICIONAR PROJETO (CREATE) ---
+        async function addNewProject(data) {
+            const newId = Date.now().toString();
+            const imageUrl = await getImageUrl(data.media); // Converte a imagem
+            
+            const newRow = document.createElement('tr');
+            newRow.dataset.id = newId;
+            newRow.dataset.image = imageUrl; // Armazena a URL da imagem
+
+            newRow.innerHTML = `
+                <td class="p-4"><img src="${imageUrl}" alt="${data.name}" class="h-10 w-16 object-cover rounded"></td>
+                <td class="p-4" data-field="name">${data.name}</td>
+                <td class="p-4" data-field="category" data-category-value="${data.category}">${getCategoryHtml(data.category)}</td>
+                <td class="p-4 space-x-2">
+                    <button class="edit-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Editar</button>
+                    <button class="gallery-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition duration-300 text-sm">Galeria</button>
+                </td>
+                <td class="hidden" data-field="description">${data.description}</td>
+                <td class="hidden" data-field="impact">${data.impact}</td>
+            `;
+            
+            projectList.appendChild(newRow);
+            resetProjectForm();
+        }
+
+        // --- FUNÇÃO PARA ATUALIZAR PROJETO (UPDATE) ---
+        async function updateProject(id, data) {
+            const row = projectList.querySelector(`tr[data-id="${id}"]`);
+            if (!row) return;
+
+            // Verifica se uma nova imagem foi enviada
+            let imageUrl = data.imageUrl; // Pega a URL antiga
+            if (data.media) {
+                imageUrl = await getImageUrl(data.media); // Gera URL da nova imagem
+            }
+            
+            row.dataset.image = imageUrl; // Atualiza a URL da imagem no dataset
+
+            // Atualiza o HTML da linha
+            row.querySelector('img').src = imageUrl;
+            row.querySelector('img').alt = data.name;
+            row.querySelector('[data-field="name"]').textContent = data.name;
+            row.querySelector('[data-field="category"]').innerHTML = getCategoryHtml(data.category);
+            row.querySelector('[data-field="category"]').dataset.categoryValue = data.category;
+            row.querySelector('[data-field="description"]').textContent = data.description;
+            row.querySelector('[data-field="impact"]').textContent = data.impact;
+
+            resetProjectForm();
+        }
+
+        // --- FUNÇÃO PARA POPULAR FORMULÁRIO (EDIT) ---
+        function startEditProject(id, row) {
+            editingProjectId = id;
+
+            // Pega os dados da linha
+            const name = row.querySelector('[data-field="name"]').textContent;
+            const category = row.querySelector('[data-field="category"]').dataset.categoryValue;
+            const description = row.querySelector('[data-field="description"]').textContent;
+            const impact = row.querySelector('[data-field="impact"]').textContent;
+            const imageUrl = row.dataset.image;
+
+            // Preenche o formulário
+            document.getElementById('projectName').value = name;
+            document.getElementById('projectCategory').value = category;
+            document.getElementById('projectDescription').value = description;
+            document.getElementById('projectImpact').value = impact;
+            document.getElementById('projectImageUrl').value = imageUrl; // Armazena a URL da imagem atual
+
+            // Atualiza UI do formulário
+            formTitle.textContent = 'Editar Projeto';
+            saveProjectButton.textContent = 'Atualizar Projeto';
+            cancelEditButton.classList.remove('hidden');
+
+            // Rola a tela para o formulário
+            formTitle.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // --- FUNÇÃO PARA LER ARQUIVO DE IMAGEM COMO DATA URL ---
+        function getImageUrl(file) {
+            return new Promise((resolve, reject) => {
+                if (!file) {
+                    resolve('https://placehold.co/600x400/cccccc/ffffff?text=Sem+Foto'); // Imagem padrão
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = e => reject(e);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // --- EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Script para Menu Mobile
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                var menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            });
+
+            // 2. Simulação de Login
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard-content').classList.remove('hidden');
+            });
+
+            // 3. Toggle de Senha
+            const togglePassword = document.getElementById('togglePassword');
+            const password = document.getElementById('password');
+            const eyeOpen = document.getElementById('eye-open');
+            const eyeClosed = document.getElementById('eye-closed');
+
+            togglePassword.addEventListener('click', function () {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                // Alterna os ícones
+                eyeOpen.classList.toggle('hidden');
+                eyeClosed.classList.toggle('hidden');
+            });
+
+            // 4. Submissão do Formulário de Projeto (Create/Update)
+            projectForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    name: document.getElementById('projectName').value,
+                    category: document.getElementById('projectCategory').value,
+                    description: document.getElementById('projectDescription').value,
+                    impact: document.getElementById('projectImpact').value,
+                    media: document.getElementById('projectMedia').files[0],
+                    imageUrl: document.getElementById('projectImageUrl').value // Pega a URL antiga (se houver)
+                };
+                
+                if (editingProjectId) {
+                    // Modo de Edição (Update)
+                    updateProject(editingProjectId, formData);
+                } else {
+                    // Modo de Criação (Create)
+                    if (!formData.media) {
+                        // Simula uma validação de que a imagem é obrigatória ao criar
+                        alert('Por favor, adicione uma foto principal para o novo projeto.');
+                        return;
+                    }
+                    addNewProject(formData);
+                }
+            });
+
+            // 5. Botão Cancelar Edição
+            cancelEditButton.addEventListener('click', resetProjectForm);
+
+            // 6. Delegação de Eventos para botões 'Editar' na lista
+            projectList.addEventListener('click', function(e) {
+                const editButton = e.target.closest('.edit-btn');
+                if (editButton) {
+                    const row = editButton.closest('tr');
+                    const id = row.dataset.id;
+                    startEditProject(id, row);
+                }
+                
+                const galleryButton = e.target.closest('.gallery-btn');
+                if (galleryButton) {
+                    alert('Funcionalidade "Galeria" ainda não implementada.');
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
